@@ -1,8 +1,4 @@
-# Multi-Hat Security Auditor
-
-Security agent that reviews projects from six security perspectives, identifies vulnerabilities, validates findings, and produces remediation guidance.
-
-## Security Hats
+ Security Hats
 
 | Hat | Role | Focus |
 |-----|------|-------|
@@ -13,7 +9,6 @@ Security agent that reviews projects from six security perspectives, identifies 
 | Gray Hat | Edge-Case Researcher | Business logic, race conditions, trust boundaries |
 | Code Review | Secure Code Reviewer | Function-level vulnerability analysis |
 
-## Quick Start
 
 1. Install dependencies:
 ```bash
@@ -29,8 +24,6 @@ python main.py scan ../CalculatorWithATwist
 ```bash
 python main.py serve --port 8765
 ```
-
-## Security Testing Policy
 
 1. Determine the target
 2. Determine whether the target is explicitly authorized
