@@ -17,7 +17,7 @@ pip install -r requirements.txt
 
 2. Run a scan:
 ```bash
-python main.py scan ../CalculatorWithATwist
+python main.py scan ../arandomfolder
 ```
 
 3. Launch the web dashboard:
