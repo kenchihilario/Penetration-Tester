@@ -181,7 +181,7 @@ class ReportGenerator:
             ("Attack Paths", str(len(self.report.attack_paths)), "attacks"),
             ("Assets", str(len(self.report.assets)), "assets"),
         ]
-        cards_html = "\\n".join(
+        cards_html = "\n".join(
             f'''<div class="stat-card {cls}">
                 <div class="stat-value">{val}</div>
                 <div class="stat-label">{label}</div>
@@ -200,7 +200,7 @@ class ReportGenerator:
             "Blue Hat Pass", "Purple Hat Pass", "Gray Hat Pass",
             "Risk Prioritization", "Report Generation"
         ]
-        items = "\\n".join(
+        items = "\n".join(
             f'''<div class="pipeline-step done">
                 <div class="step-indicator">
                     <span class="step-check">DONE</span>
@@ -222,7 +222,7 @@ class ReportGenerator:
         <h2 class="section-title">No Findings</h2>
         <p class="no-data">No vulnerabilities detected.</p>
     </section>"""
-        finding_cards = "\\n".join(
+        finding_cards = "\n".join(
             self._finding_card(f, i) for i, f in enumerate(all_findings)
         )
         return f"""
@@ -297,7 +297,7 @@ class ReportGenerator:
     def _build_attack_paths_section(self) -> str:
         if not self.report.attack_paths:
             return ""
-        paths_html = "\\n".join(
+        paths_html = "\n".join(
             self._attack_path_card(ap, i)
             for i, ap in enumerate(self.report.attack_paths)
         )
@@ -308,7 +308,7 @@ class ReportGenerator:
     </section>"""
 
     def _attack_path_card(self, ap: AttackPath, idx: int) -> str:
-        steps_html = "\\n".join(
+        steps_html = "\n".join(
             f'''<div class="attack-step">
                 <div class="step-number">{s.order}</div>
                 <div class="step-content">
@@ -318,7 +318,7 @@ class ReportGenerator:
             </div>'''
             for s in ap.steps
         )
-        detection_html = "\\n".join(
+        detection_html = "\n".join(
             f'<li>{self._esc(d)}</li>' for d in ap.detection_opportunities
         )
         return f"""
@@ -350,7 +350,7 @@ class ReportGenerator:
     def _build_blue_team_section(self) -> str:
         if not self.report.blue_assessments:
             return ""
-        assessments_html = "\\n".join(
+        assessments_html = "\n".join(
             self._blue_assessment_card(ba, i)
             for i, ba in enumerate(self.report.blue_assessments)
         )
@@ -366,21 +366,21 @@ class ReportGenerator:
             ("Detection Possible", ba.detection_possible),
             ("Alerts Configured", ba.alerts_configured),
         ]
-        status_html = "\\n".join(
+        status_html = "\n".join(
             f'''<div class="defense-status {'active' if active else 'inactive'}">
                 <span class="status-label">{label}</span>
                 <span class="status-value">{'YES' if active else 'NO'}</span>
             </div>'''
             for label, active in status_items
         )
-        missing_html = "\\n".join(
+        missing_html = "\n".join(
             f'''<div class="missing-control">
                 <span class="control-name">- {self._esc(c.control_name)}</span>
             </div>'''
             for c in ba.missing_controls
         )
-        ioc_html = "\\n".join(f'<li>{self._esc(ioc)}</li>' for ioc in ba.ioc_indicators)
-        recs_html = "\\n".join(f'<li>{self._esc(r)}</li>' for r in ba.recommendations)
+        ioc_html = "\n".join(f'<li>{self._esc(ioc)}</li>' for ioc in ba.ioc_indicators)
+        recs_html = "\n".join(f'<li>{self._esc(r)}</li>' for r in ba.recommendations)
         return f"""
         <div class="blue-card">
             <div class="blue-header" onclick="this.closest('.blue-card').classList.toggle('expanded')">
@@ -416,7 +416,7 @@ class ReportGenerator:
     def _build_purple_section(self) -> str:
         if not self.report.purple_validations:
             return ""
-        validations_html = "\\n".join(
+        validations_html = "\n".join(
             self._purple_card(pv, i)
             for i, pv in enumerate(self.report.purple_validations)
         )
@@ -466,7 +466,7 @@ class ReportGenerator:
     def _build_gray_hat_section(self) -> str:
         if not self.report.gray_hat_notes:
             return ""
-        findings_html = "\\n".join(
+        findings_html = "\n".join(
             self._finding_card(f, i) for i, f in enumerate(self.report.gray_hat_notes)
         )
         return f"""
@@ -484,7 +484,7 @@ class ReportGenerator:
             by_type.setdefault(key, []).append(a)
         groups_html = ""
         for atype, assets in sorted(by_type.items()):
-            items_html = "\\n".join(
+            items_html = "\n".join(
                 f'''<div class="asset-item {'has-risk' if a.risk_notes else ''}">
                     <span class="asset-path">{self._esc(a.path)}</span>
                     <span class="asset-name">{self._esc(a.name)}</span>
@@ -551,71 +551,197 @@ class ReportGenerator:
     def _get_css() -> str:
         return """
 :root {
-    --bg-primary: #ffffff;
-    --bg-card: #f8f9fa;
-    --text-primary: #212529;
-    --text-secondary: #495057;
-    --border: #dee2e6;
-    --accent: #0d6efd;
-    --sev-critical: #dc3545;
-    --sev-high: #fd7e14;
-    --sev-medium: #ffc107;
-    --sev-low: #0dcaf0;
-    --sev-info: #6c757d;
-    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bg-primary: #f8fafc;
+    --bg-card: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border: #e2e8f0;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --sev-critical: #ef4444;
+    --sev-high: #f97316;
+    --sev-medium: #eab308;
+    --sev-low: #3b82f6;
+    --sev-info: #64748b;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font); background: var(--bg-primary); color: var(--text-primary); line-height: 1.5; padding: 20px; }
-.app { max-width: 1000px; margin: 0 auto; }
-.hero { padding: 40px 0; border-bottom: 2px solid var(--border); margin-bottom: 30px; }
-.hero-title { font-size: 2rem; font-weight: bold; margin-bottom: 10px; }
-.hero-subtitle { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
-.hero-meta { display: flex; gap: 20px; margin-bottom: 20px; color: var(--text-secondary); font-size: 0.9rem; }
-.hat-badges { display: flex; gap: 10px; flex-wrap: wrap; }
-.hat-badge { padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem; background: var(--bg-card); }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 30px; }
-.stat-card { padding: 15px; border: 1px solid var(--border); text-align: center; border-radius: 4px; }
-.stat-value { font-size: 1.5rem; font-weight: bold; margin-bottom: 5px; }
-.stat-label { font-size: 0.8rem; color: var(--text-secondary); }
-.section { margin-bottom: 40px; }
-.section-title { font-size: 1.5rem; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-.pipeline-track { display: flex; gap: 10px; flex-wrap: wrap; }
-.pipeline-step { padding: 5px 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem; background: var(--bg-card); }
-.filter-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-.filter-btn { padding: 5px 15px; border: 1px solid var(--border); background: var(--bg-primary); cursor: pointer; }
-.filter-btn.active { background: var(--border); }
-.findings-list, .attack-paths-list, .blue-list, .purple-list { display: flex; flex-direction: column; gap: 15px; }
-.finding-card, .attack-path-card, .blue-card, .purple-card { border: 1px solid var(--border); border-radius: 4px; }
+body { 
+    font-family: var(--font); 
+    background: var(--bg-primary); 
+    color: var(--text-primary); 
+    line-height: 1.6; 
+    padding: 2rem; 
+}
+.app { max-width: 1200px; margin: 0 auto; }
+.hero { 
+    background: var(--bg-card); 
+    padding: 2rem; 
+    border-radius: 8px; 
+    box-shadow: var(--shadow-sm); 
+    border: 1px solid var(--border); 
+    margin-bottom: 2rem; 
+}
+.hero-title { font-size: 2.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+.hero-subtitle { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+.hero-meta { display: flex; gap: 1.5rem; color: var(--text-secondary); font-size: 0.95rem; }
+.meta-item { display: inline-flex; align-items: center; background: var(--bg-primary); padding: 0.25rem 0.75rem; border-radius: 4px; border: 1px solid var(--border); }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.stat-card { 
+    background: var(--bg-card); 
+    padding: 1.5rem; 
+    border: 1px solid var(--border); 
+    text-align: center; 
+    border-radius: 8px; 
+    box-shadow: var(--shadow-sm); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.stat-value { font-size: 2rem; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 0.5rem; }
+.stat-label { font-size: 0.875rem; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.stat-card.critical .stat-value { color: var(--sev-critical); }
+.stat-card.high .stat-value { color: var(--sev-high); }
+.stat-card.medium .stat-value { color: var(--sev-medium); }
+
+.section { background: var(--bg-card); padding: 2rem; border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 2rem; }
+.section-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--bg-primary); }
+
+.pipeline-track { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.pipeline-step { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    padding: 0.5rem 1rem; 
+    border: 1px solid var(--border); 
+    border-radius: 9999px; 
+    font-size: 0.875rem; 
+    background: var(--bg-primary); 
+    font-weight: 500;
+}
+.step-check { color: #16a34a; font-weight: bold; font-size: 0.75rem; }
+
+.filter-bar { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.filter-btn { 
+    padding: 0.5rem 1rem; 
+    border: 1px solid var(--border); 
+    background: var(--bg-primary); 
+    color: var(--text-secondary);
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer; 
+    transition: all 0.2s;
+}
+.filter-btn:hover { background: var(--border); color: var(--text-primary); }
+.filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+.findings-list, .attack-paths-list, .blue-list, .purple-list { display: flex; flex-direction: column; gap: 1rem; }
+.finding-card, .attack-path-card, .blue-card, .purple-card { 
+    border: 1px solid var(--border); 
+    border-radius: 8px; 
+    background: var(--bg-primary);
+    overflow: hidden;
+}
+
 .finding-card.critical { border-left: 4px solid var(--sev-critical); }
 .finding-card.high { border-left: 4px solid var(--sev-high); }
 .finding-card.medium { border-left: 4px solid var(--sev-medium); }
 .finding-card.low { border-left: 4px solid var(--sev-low); }
 .finding-card.informational { border-left: 4px solid var(--sev-info); }
-.finding-header, .path-header, .blue-header, .purple-header { padding: 15px; cursor: pointer; background: var(--bg-card); display: flex; flex-direction: column; position: relative; }
-.finding-badges, .path-badges { display: flex; gap: 10px; margin-bottom: 10px; font-size: 0.8rem; }
-.severity-badge { font-weight: bold; }
-.severity-badge.critical { color: var(--sev-critical); }
-.severity-badge.high { color: var(--sev-high); }
-.severity-badge.medium { color: var(--sev-medium); }
-.severity-badge.low { color: var(--sev-low); }
-.severity-badge.informational { color: var(--sev-info); }
-.finding-title, .path-objective { font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; }
-.expand-arrow { position: absolute; right: 15px; top: 15px; font-size: 0.8rem; color: var(--accent); }
-.finding-body, .path-body, .blue-body, .purple-body { display: none; padding: 15px; border-top: 1px solid var(--border); }
+
+.finding-header, .path-header, .blue-header, .purple-header { 
+    padding: 1.25rem; 
+    cursor: pointer; 
+    background: var(--bg-card); 
+    position: relative; 
+    transition: background 0.15s;
+}
+.finding-header:hover, .path-header:hover, .blue-header:hover, .purple-header:hover { background: #f1f5f9; }
+
+.finding-badges, .path-badges { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 600; align-items: center; }
+.severity-badge { padding: 0.15rem 0.5rem; border-radius: 4px; color: white; }
+.severity-badge.critical { background: var(--sev-critical); }
+.severity-badge.high { background: var(--sev-high); }
+.severity-badge.medium { background: var(--sev-medium); }
+.severity-badge.low { background: var(--sev-low); }
+.severity-badge.informational { background: var(--sev-info); }
+
+.confidence-badge, .hat-indicator, .risk-score, .likelihood-badge { 
+    padding: 0.15rem 0.5rem; 
+    background: var(--bg-primary); 
+    border: 1px solid var(--border); 
+    border-radius: 4px; 
+    color: var(--text-secondary);
+}
+
+.finding-title, .path-objective { font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; }
+.finding-location { font-family: monospace; font-size: 0.85rem; color: var(--text-secondary); background: var(--bg-primary); padding: 0.25rem 0.5rem; border-radius: 4px; display: inline-block; }
+
+.expand-arrow { position: absolute; right: 1.25rem; top: 1.25rem; font-size: 0.875rem; color: var(--accent); font-weight: 500; }
+
+.finding-body, .path-body, .blue-body, .purple-body { display: none; padding: 1.5rem; border-top: 1px solid var(--border); background: var(--bg-card); }
 .finding-card.expanded .finding-body, .attack-path-card.expanded .path-body, .blue-card.expanded .blue-body, .purple-card.expanded .purple-body { display: block; }
-h4 { font-size: 0.9rem; margin-bottom: 5px; margin-top: 15px; }
+
+h4 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em;}
 h4:first-child { margin-top: 0; }
-pre, code { font-family: monospace; background: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-size: 0.9rem; }
-pre { padding: 10px; overflow-x: auto; }
-.finding-detail-grid, .defense-grid, .purple-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-.detail-block, .defense-block, .purple-block { background: var(--bg-card); padding: 10px; border: 1px solid var(--border); border-radius: 4px; }
-ul { padding-left: 20px; }
-.assets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
-.asset-group { border: 1px solid var(--border); padding: 15px; border-radius: 4px; }
-.asset-item { font-size: 0.85rem; padding: 5px 0; border-bottom: 1px solid var(--border); }
-.report-footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid var(--border); }
-.policy-box { background: var(--bg-card); padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; }
-.footer-credit { text-align: center; font-size: 0.8rem; color: var(--text-secondary); }
+p { margin-bottom: 1rem; color: var(--text-secondary); }
+
+pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: var(--bg-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.875rem; border: 1px solid var(--border); color: #be185d;}
+pre { padding: 1rem; overflow-x: auto; display: block; color: var(--text-secondary); }
+.evidence-code { display: block; margin-top: 0.5rem; padding: 1rem; white-space: pre-wrap; word-break: break-all; }
+
+.finding-detail-grid, .defense-grid, .purple-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+.detail-block, .defense-block, .purple-block { background: var(--bg-primary); padding: 1.25rem; border: 1px solid var(--border); border-radius: 6px; }
+
+ul { padding-left: 1.5rem; color: var(--text-secondary); margin-bottom: 1rem; }
+li { margin-bottom: 0.5rem; }
+
+.finding-refs { margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.ref-tag { padding: 0.25rem 0.75rem; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 9999px; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); }
+.vuln-type { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+
+/* Attack Paths Specific */
+.attack-step { display: flex; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 6px; }
+.step-number { flex-shrink: 0; width: 28px; height: 28px; background: var(--text-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.875rem; }
+.step-desc { font-weight: 500; color: var(--text-primary); margin-bottom: 0.25rem; }
+.step-meta { font-size: 0.85rem; color: var(--text-secondary); }
+
+/* Blue Team Specific */
+.defense-status { display: flex; justify-content: space-between; padding: 0.75rem; border-bottom: 1px solid var(--border); }
+.defense-status:last-child { border-bottom: none; }
+.status-label { font-weight: 500; color: var(--text-secondary); }
+.status-value { font-weight: 600; }
+.defense-status.active .status-value { color: #16a34a; }
+.defense-status.inactive .status-value { color: #ef4444; }
+
+/* Purple Team Specific */
+.validation-result { font-weight: 700; font-size: 1.125rem; }
+.purple-card.undetected { border-left: 4px solid var(--sev-critical); }
+.purple-card.detected { border-left: 4px solid #16a34a; }
+.retest-badge { padding: 0.25rem 0.75rem; background: #fef3c7; color: #b45309; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-left: 1rem; border: 1px solid #fde68a; }
+
+/* Assets Section */
+.assets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
+.asset-group { background: var(--bg-primary); border: 1px solid var(--border); padding: 1.25rem; border-radius: 6px; }
+.asset-type-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+.asset-item { font-size: 0.875rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.25rem; }
+.asset-item:last-child { border-bottom: none; }
+.asset-path { font-family: monospace; color: var(--text-secondary); }
+.asset-name { font-weight: 500; color: var(--text-primary); }
+.asset-risk { color: var(--sev-high); font-size: 0.8rem; font-weight: 500; }
+
+.report-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+.policy-box { background: var(--bg-primary); padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 2rem; }
+.policy-box h3 { margin-bottom: 1rem; color: var(--text-primary); }
+.policy-list li { color: var(--text-secondary); }
+.footer-credit { text-align: center; font-size: 0.875rem; color: var(--text-secondary); }
+
+@media (max-width: 768px) {
+    .finding-detail-grid, .defense-grid, .purple-grid { grid-template-columns: 1fr; }
+    .hero-meta { flex-direction: column; gap: 0.5rem; }
+}
         """
 
     @staticmethod
