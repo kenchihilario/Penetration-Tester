@@ -1,0 +1,28 @@
+{
+  "name": "multi-hat-security-auditor",
+  "version": "1.0.0",
+  "description": "Security agent that reviews projects from multiple security perspectives",
+  "author": "PenTest",
+  "license": "MIT",
+  "hats": [
+    "white",
+    "red",
+    "blue",
+    "purple",
+    "gray",
+    "code-review"
+  ],
+  "severity_levels": {
+    "critical": "Direct compromise or extremely serious exposure",
+    "high": "Significant unauthorized access/data exposure",
+    "medium": "Exploitable weakness with limited impact",
+    "low": "Minor security weakness",
+    "informational": "Hardening/recommendation"
+  },
+  "confidence_levels": [
+    "CONFIRMED",
+    "LIKELY",
+    "POSSIBLE",
+    "FALSE POSITIVE"
+  ]
+}
